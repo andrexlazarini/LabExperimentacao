@@ -92,5 +92,66 @@ def graphql_repo(owner, name):
 
     print(f"Falhou: {owner}/{name}")
     return None
+    
+    def save_csv(rows):
+    with open("top_100_repos_github.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "name",
+            "nameWithOwner",
+            "url",
+            "stars",
+            "createdAt",
+            "updatedAt",
+            "language",
+            "releases",
+            "mergedPRs",
+            "issues_total",
+            "issues_closed",
+            "issues_closed_ratio"
+        ])
+
+        for r in rows:
+            total = r["issues"]["totalCount"]
+            closed = r["closedIssues"]["totalCount"]
+            ratio = closed / total if total else 0
+
+            writer.writerow([
+                r["name"],
+                r["nameWithOwner"],
+                r["url"],
+                r["stargazerCount"],
+                r["createdAt"],
+                r["updatedAt"],
+                r["primaryLanguage"]["name"] if r["primaryLanguage"] else "",
+                r["releases"]["totalCount"],
+                r["pullRequests"]["totalCount"],
+                total,
+                closed,
+                ratio
+            ])
 
 
+def main():
+    top = fetch_top_repos_rest(100)
+
+    print("Coletando métricas GraphQL...")
+
+    rows = []
+    for repo in top:
+        owner = repo["owner"]["login"]
+        name = repo["name"]
+
+        data = graphql_repo(owner, name)
+        if data:
+            rows.append(data)
+
+        time.sleep(0.3)
+
+    save_csv(rows)
+
+    print("\nOK! Arquivo gerado: top_100_repos_github.csv")
+
+
+if _name_ == "_main_":
+    main()
