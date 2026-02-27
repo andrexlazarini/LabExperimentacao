@@ -93,7 +93,7 @@ def graphql_repo(owner, name):
     print(f"Falhou: {owner}/{name}")
     return None
     
-    def save_csv(rows):
+def save_csv(rows):
     with open("top_100_repos_github.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([
@@ -153,5 +153,5 @@ def main():
     print("\nOK! Arquivo gerado: top_100_repos_github.csv")
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
