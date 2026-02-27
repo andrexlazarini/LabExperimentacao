@@ -4,5 +4,5 @@
 * André Xavier Lazarini
 * João Pedro Guimarães Ribeiro
 
-* ## Orientadores
+## Orientadores
 * Danilo de Quadros Maia Filho
