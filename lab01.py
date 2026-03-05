@@ -5,6 +5,21 @@ import time
 import urllib.request
 import urllib.error
 
+
+def load_dotenv():
+    """Carrega variáveis do arquivo .env para os.environ."""
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    if not os.path.exists(env_path):
+        return
+    with open(env_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, _, value = line.partition("=")
+                os.environ[key.strip()] = value.strip().strip('"').strip("'")
+
+
+load_dotenv()
 TOKEN = os.getenv("GITHUB_TOKEN")
 
 if not TOKEN:
@@ -93,8 +108,8 @@ def graphql_repo(owner, name):
     print(f"Falhou: {owner}/{name}")
     return None
     
-def save_csv(rows):
-    with open("top_100_repos_github.csv", "w", newline="", encoding="utf-8") as f:
+def save_csv(rows, filename="top_1000_repos_github.csv"):
+    with open(filename, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([
             "name",
@@ -133,12 +148,13 @@ def save_csv(rows):
 
 
 def main():
-    top = fetch_top_repos_rest(100)
+    N_REPOS = 1000
+    top = fetch_top_repos_rest(N_REPOS)
 
-    print("Coletando métricas GraphQL...")
+    print(f"Coletando métricas GraphQL para {len(top)} repositórios...")
 
     rows = []
-    for repo in top:
+    for i, repo in enumerate(top, 1):
         owner = repo["owner"]["login"]
         name = repo["name"]
 
@@ -146,11 +162,14 @@ def main():
         if data:
             rows.append(data)
 
+        if i % 100 == 0:
+            print(f"  Progresso: {i}/{len(top)}")
         time.sleep(0.3)
 
-    save_csv(rows)
+    csv_file = "top_1000_repos_github.csv"
+    save_csv(rows, csv_file)
 
-    print("\nOK! Arquivo gerado: top_100_repos_github.csv")
+    print(f"\nOK! {len(rows)} repositórios salvos em: {csv_file}")
 
 
 if __name__ == "__main__":
