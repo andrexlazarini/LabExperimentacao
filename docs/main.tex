@@ -1,0 +1,53 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+
+\title{Relatório Parcial - Laboratório 01}
+\author{André Xavier Lazarini e João Pedro Guimarães}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Objetivos}
+O objetivo principal deste laboratório é estudar as principais características de sistemas populares open-source. Dessa forma, o trabalho busca analisar como esses sistemas são desenvolvidos, com que frequência recebem contribuição externa, com qual frequência lançam releases, entre outras métricas relevantes. Para atingir esse propósito, o estudo baseia-se na coleta e discussão de dados dos 1.000 repositórios com o maior número de estrelas no GitHub.
+
+\section{Introdução e Hipóteses}
+Para guiar a investigação proposta neste laboratório, definimos hipóteses para cada uma das Questões de Pesquisa (RQs). Essas hipóteses são baseadas no que imaginamos encontrar antes de analisar os dados reais coletados no GitHub.
+
+\begin{itemize}
+    \item \textbf{RQ 01. Sistemas populares são maduros/antigos?}
+    \textit{Hipótese:} Sim. Esperamos que a grande maioria dos repositórios no top 1.000 tenha uma idade avançada. Construir uma comunidade gigantesca e acumular milhares de estrelas é um processo que demanda tempo.
+    
+    \item \textbf{RQ 02. Sistemas populares recebem muita contribuição externa?}
+    \textit{Hipótese:} Sim. Acreditamos que o número de Pull Requests aceitas será altíssimo. Projetos gigantescos dependem ativamente da comunidade.
+    
+    \item \textbf{RQ 03. Sistemas populares lançam releases com frequência?}
+    \textit{Hipótese:} Esperamos uma alta frequência de releases. Projetos bem mantidos geralmente adotam práticas ágeis e entrega contínua.
+    
+    \item \textbf{RQ 04. Sistemas populares são atualizados com frequência?}
+    \textit{Hipótese:} Altamente frequente. O tempo até a última atualização deve ser de poucos dias ou até horas, refletindo repositórios ativos.
+    
+    \item \textbf{RQ 05. Sistemas populares são escritos nas linguagens mais populares?}
+    \textit{Hipótese:} Sim. Nossa expectativa é que a grande maioria dos projetos utilize as linguagens de programação mais conhecidas e requisitadas pelo mercado atual.
+    
+    \item \textbf{RQ 06. Sistemas populares possuem um alto percentual de issues fechadas?}
+    \textit{Hipótese:} Sim. Esperamos que a maior parte das issues já esteja resolvida e fechada.
+    
+    \item \textbf{RQ 07 (Bônus). Sistemas escritos em linguagens mais populares recebem mais contribuição externa, lançam mais releases e são atualizados com mais frequência?}
+    \textit{Hipótese:} Sim. Linguagens com maior adoção reduzem a barreira de entrada para novos desenvolvedores.
+\end{itemize}
+
+\section{Metodologia}
+Para responder às questões de pesquisa, desenvolvemos um script automatizado para coleta e consolidação de dados. Respeitamos estritamente a observação de não utilizar bibliotecas de terceiros que realizem consultas à API. A extração ocorreu nas seguintes etapas:
+
+\begin{enumerate}
+    \item \textbf{Busca e Paginação (API REST):} Utilizamos a API de busca REST para consultar os repositórios. Implementamos a paginação para alcançar a consulta dos 1.000 repositórios exigidos.
+    \item \textbf{Coleta de Métricas (API GraphQL):} Com a lista em mãos, o script escreve a query GraphQL e faz o consumo a partir de requisições diretas para extrair métricas específicas.
+    \item \textbf{Tratamento e Armazenamento:} Durante a execução, pausas estratégicas foram inseridas para evitar bloqueios da API. Os dados foram estruturados e salvos em um arquivo .csv.
+\end{enumerate}
+
+\end{document}
